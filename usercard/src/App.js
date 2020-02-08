@@ -46,26 +46,26 @@ class App extends React.Component {
       .catch(err => console.log(err));
   };
 
-  // fetchFollowers = user => {
-  //   axios
-  //     .get(`https://api.github.com/users/${user}/followers`)
-  //     .then(res => {
-  //       console.log(res.data)
-  //       let followersResData = res.data;
-  //       followersResData.forEach(el => {
-  //         axios
-  //           .get(`https://api.github.com/users/${el.login}`)
-  //           .then(res => {
-  //             let followers = res.data;
-  //             this.setState({
-  //               followersData: [...this.state.followersData, followers]
-  //             });
-  //             console.log(this.state.followersData);
-  //           })
-  //           .catch(err => console.log(err));
-  //       })
-  //     })
-  // };
+  fetchFollowers = user => {
+    axios
+      .get(`https://api.github.com/users/${user}/followers`)
+      .then(res => {
+        console.log(res.data)
+        let followersResData = res.data;
+        followersResData.forEach(el => {
+          axios
+            .get(`https://api.github.com/users/${el.login}`)
+            .then(res => {
+              let followers = res.data;
+              this.setState({
+                followersData: [...this.state.followersData, followers]
+              });
+              console.log(this.state.followersData);
+            })
+            .catch(err => console.log(err));
+        })
+      })
+  };
   
 
   // componentDidUpdate() {
