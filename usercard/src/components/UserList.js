@@ -5,7 +5,7 @@ const UserList = props => {
 
   return(
     <div>
-      <h2>{props.userData.name}</h2>
+      <h2>{props.userData.name} and His Minions</h2>
       <UserCard card={props.userData} />
 
       {props.followersData.map(card => (

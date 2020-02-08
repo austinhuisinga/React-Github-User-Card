@@ -15,7 +15,6 @@ class App extends React.Component {
     userData: [],
     login: 'austinhuisinga',
     followersData: []
-
   };
 
   componentDidMount() {
