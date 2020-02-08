@@ -1,26 +1,92 @@
 import React from 'react';
-import logo from './logo.svg';
+import axios from 'axios';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import UserList from './components/UserList';
+
+// const one = `https://api.github.com/users/austinhuisinga`;
+// const two = `https://api.github.com/users/austinhuisinga/followers`;
+// const requestOne = axios.get(one);
+// const requestTwo = axios.get(two);
+
+class App extends React.Component {
+  state = {
+    userData: [],
+    login: 'austinhuisinga',
+    followersData: []
+
+  };
+
+  componentDidMount() {
+    // axios.all([requestTwo, requestOne]).then(axios.spread((...responses) => {
+    //   const responseOne = responses[0]
+    //   const responseTwo = responses[1]
+    //   console.log(responseTwo.data)
+    //   this.setState({
+    //     name: responseOne.data.name,
+    //     login: responseOne.data.login,
+    //     location: responseOne.data.location,
+
+    //     followers: responseTwo.data,
+    //     followersLogin: responseTwo.data.login
+    //   })
+    // }))
+    this.fetchUser(this.state.login)
+    this.fetchFollowers(this.state.login)
+  }
+  fetchUser = user => {
+    axios
+      .get(`https://api.github.com/users/austinhuisinga${user}`)
+      .then(res => {
+        this.setState({
+          userData: res.data
+        });
+      })
+      .catch(err => console.log(err));
+  };
+
+  fetchFollowers = user => {
+    axios
+      .get(`https://api.github.com/users/austinhuisinga/${user}/followers`)
+      .then(res => {
+        console.log(res.data)
+        let followersData = res.data;
+        followersData.forEach(el => {
+          axios
+            .get(`https://api.github.com/users/austinhuisinga${el.login}`)
+            .then(res => {
+              let followers = res.data;
+              this.setState({
+                followersData: [...this.state.followersData, followers]
+              });
+            })
+        })
+      .catch(err => console.log(err));
+    })
+  };
+  
+
+  // componentDidUpdate() {
+  //   axios.get(`https://api.github.com/users/austinhuisinga/followers`)
+  //     .then(res => {
+  //       this.setState({
+  //         followers: res.data.followers,
+  //         followersLogin: res.data.login  
+  //       })
+  //     })
+  //     .catch(err => console.log(err));
+  // }
+
+  render(){
+    return (
+      <div className="App">
+        <UserList 
+          userData={this.state.userData}
+          followersData={this.state.followersData}
+        />
+      </div>
+    );
+  }
 }
 
 export default App;
