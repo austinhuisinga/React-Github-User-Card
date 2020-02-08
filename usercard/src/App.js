@@ -3,6 +3,7 @@ import axios from 'axios';
 import './App.css';
 
 import UserList from './components/UserList';
+import UserCard from './components/UserCard';
 
 // const one = `https://api.github.com/users/austinhuisinga`;
 // const two = `https://api.github.com/users/austinhuisinga/followers`;
@@ -36,7 +37,7 @@ class App extends React.Component {
   }
   fetchUser = user => {
     axios
-      .get(`https://api.github.com/users/austinhuisinga${user}`)
+      .get(`https://api.github.com/users/${user}`)
       .then(res => {
         this.setState({
           userData: res.data
@@ -45,25 +46,26 @@ class App extends React.Component {
       .catch(err => console.log(err));
   };
 
-  fetchFollowers = user => {
-    axios
-      .get(`https://api.github.com/users/austinhuisinga/${user}/followers`)
-      .then(res => {
-        console.log(res.data)
-        let followersData = res.data;
-        followersData.forEach(el => {
-          axios
-            .get(`https://api.github.com/users/austinhuisinga${el.login}`)
-            .then(res => {
-              let followers = res.data;
-              this.setState({
-                followersData: [...this.state.followersData, followers]
-              });
-            })
-        })
-      .catch(err => console.log(err));
-    })
-  };
+  // fetchFollowers = user => {
+  //   axios
+  //     .get(`https://api.github.com/users/${user}/followers`)
+  //     .then(res => {
+  //       console.log(res.data)
+  //       let followersResData = res.data;
+  //       followersResData.forEach(el => {
+  //         axios
+  //           .get(`https://api.github.com/users/${el.login}`)
+  //           .then(res => {
+  //             let followers = res.data;
+  //             this.setState({
+  //               followersData: [...this.state.followersData, followers]
+  //             });
+  //             console.log(this.state.followersData);
+  //           })
+  //           .catch(err => console.log(err));
+  //       })
+  //     })
+  // };
   
 
   // componentDidUpdate() {
